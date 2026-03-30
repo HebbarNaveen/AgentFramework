@@ -1,0 +1,52 @@
+{
+  "mcp_servers": {
+    "local_servers":
+  [
+    {
+      "name": "airbnb_mcp",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@openbnb/mcp-server-airbnb",
+        "--ignore-robots-txt"
+      ]
+    },
+    {
+      "name": "ado_mcp",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@azure-devops/mcp",
+        "AQADemo"
+      ]
+    },
+    {
+      "name": "stackhawk_mcp",
+      "command": "python",
+      "args": ["-m", "stackhawk_mcp.server"],
+      "environment_variables": {
+        "STACKHAWK_API_KEY": "hawk.eGWXL4aiQKo7dTYXXfh4.VzrcUQZlg9oIjOikpeOd"
+      }
+    }
+  ],
+  "remote_servers":
+  [
+    {
+      "name": "exa_mcp",
+      "url": "https://mcp.exa.ai/mcp"  
+    }
+  ]
+  },
+  "rest_apis": [
+    {
+      "plugin_name": "PetStoreApiPlugin",
+      "uri": "https://petstore.swagger.io/v2/swagger.json"
+    }
+  ],
+    "model":
+   {
+      "id": "gpt-4o",
+      "endpoint": "https://naveen-demo.openai.azure.com/",
+      "api_key": "<API Key here"
+    }
+}

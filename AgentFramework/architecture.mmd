@@ -1,0 +1,108 @@
+---
+config:
+    xyChart:
+        width: 900
+        height: 600
+    themeVariables:
+        primaryColor: '#2B579A'
+        primaryBorderColor: '#1F4B8B'
+        secondaryColor: '#0D6FB8'
+        tertiaryColor: '#1F4B8B'
+---
+graph TB
+    subgraph Runtime["🚀 Runtime Execution"]
+        App["CustomAgent.exe<br/>(Entry Point)"]
+        Config["config.json<br/>message.json"]
+        Chat["Console Chat Loop<br/>(User Interaction)"]
+    end
+
+    subgraph Builder["🏗️ Agent Builder Pattern"]
+        AB["AgentBuilder<br/>(IAgentBuilder)"]
+        WithModel["WithModel()"]
+        WithMCP["WithLocalMCPTools()<br/>WithRemoteMCPTools()"]
+        WithREST["WithRESTAPI()"]
+        WithPlugins["WithNativeCodePlugin()"]
+        Build["Build()"]
+    end
+
+    subgraph CoreLibrary["⚙️ Semantic Kernel Core"]
+        Kernel["Kernel Instance"]
+        Services["Services"]
+        ChatComp["IChatCompletionService"]
+    end
+
+    subgraph Models["🤖 Language Models"]
+        AzureOAI["Azure OpenAI<br/>(GPT-*)<br/>or<br/>OpenAI API"]
+        Settings["OpenAIPromptExecutionSettings<br/>(FunctionChoiceBehavior.Auto)"]
+    end
+
+    subgraph ToolsIntegration["🔌 Tools & Plugins"]
+        NativePlugins["Native Code Plugins<br/>• SendCloudMessage<br/>• StackHawk Security Scan"]
+        MCPLocal["Local MCP Tools<br/>(Model Context Protocol)<br/>via stdio spawn"]
+        MCPRemote["Remote MCP Tools<br/>(HTTP/WebSocket)"]
+        RESTAPIs["REST API Integration<br/>(Auto-discovery via OpenAPI)"]
+    end
+
+    subgraph ExternalServices["☁️ External Services"]
+        IoTHub["Azure IoT Hub"]
+        CloudServices["Cloud Messaging"]
+        SecurityTools["Security Scanning Tools"]
+    end
+
+    subgraph Dependencies["📦 Key Dependencies"]
+        SK["Microsoft.SemanticKernel<br/>v1.71.0 - v1.73.0"]
+        MCP["ModelContextProtocol<br/>v0.8.0 - v1.1.0"]
+        Azure["Microsoft.Azure.Devices.Client<br/>(IoT Hub SDK)"]
+        Config_Libs["Configuration & Logging<br/>Extensions.Configuration<br/>Extensions.Logging"]
+    end
+
+    %% Execution Flow
+    App -->|"1. Load config"| Config
+    Config -->|"2. Configure"| AB
+    AB -->|"3a. Add Model"| WithModel
+    AB -->|"3b. Add Tools"| WithMCP
+    AB -->|"3c. Add Tools"| WithREST
+    AB -->|"3d. Add Plugins"| WithPlugins
+    WithModel --> Build
+    WithMCP --> Build
+    WithREST --> Build
+    WithPlugins --> Build
+    Build -->|"4. Instantiate"| Kernel
+    Kernel --> Services
+    Services --> ChatComp
+    ChatComp -->|"5. Execute in chat loop"| AzureOAI
+    ChatComp --> Settings
+
+    %% Tools Flow
+    Kernel -->|"Auto-select tools"| NativePlugins
+    Kernel -->|"Auto-select tools"| MCPLocal
+    Kernel -->|"Auto-select tools"| MCPRemote
+    Kernel -->|"Auto-select tools"| RESTAPIs
+
+    %% External Services
+    NativePlugins --> CloudServices
+    NativePlugins --> SecurityTools
+    MCPLocal --> ExternalServices
+    MCPRemote --> ExternalServices
+    RESTAPIs --> ExternalServices
+
+    %% Dependencies
+    AB --> SK
+    AB --> MCP
+    AB --> Azure
+    AB --> Config_Libs
+    Kernel --> SK
+    ChatComp --> AzureOAI
+
+    %% Chat Loop
+    AzureOAI -->|"6. Response + Tool Results"| ChatComp
+    ChatComp -->|"7. Display & Continue"| Chat
+    Chat -->|"8. User Input"| ChatComp
+
+    style Runtime fill:#E8F4F8,stroke:#2B579A,stroke-width:2px
+    style Builder fill:#FFF4E6,stroke:#FF9800,stroke-width:2px
+    style CoreLibrary fill:#F3E5F5,stroke:#9C27B0,stroke-width:2px
+    style Models fill:#E8F5E9,stroke:#4CAF50,stroke-width:2px
+    style ToolsIntegration fill:#FCE4EC,stroke:#E91E63,stroke-width:2px
+    style ExternalServices fill:#E0F2F1,stroke:#009688,stroke-width:2px
+    style Dependencies fill:#F1F8E9,stroke:#827717,stroke-width:2px
